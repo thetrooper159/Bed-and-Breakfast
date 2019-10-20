@@ -1,25 +1,62 @@
 <!doctype html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-</style>
-
-
-    <title>Ultimate Bed and Breakfast</title>
+  <link rel="shortcut icon" type="image/x-icon" href="img/icon."/>
+  <title>Bed And Breakfast 2 - The Official Website</title>
+   {{#if showTests}}
+   <link rel="stylesheet" href="/vendor/mocha.css">
+   {{/if}}
+   <script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
 </head>
-<body>
+<style>
+li a:hover {
+  background-color: #111;
+}
+</style>
+<ul style = "list-style-type: none; margin: 0; padding: 0; overflow: hidden; background-color: #333">
+  <li style = "float: left"><a style="display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;"href="/">Home</a></li>
+  <li style = "float: left"><a style="display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;"href="/book">Book A Room</a></li>
+  <li style = "float: left"><a style="display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;"href="/about">About</a></li>
+  <li style = "float: left"><a style="display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;"href="/contact">Contact Us</a></li>
+</ul>
+<br><br>
+<body style = "background-color:rgb(135,206,250)">
+  <header><img src="/img/logo.png" alt="My Handlebars Website Logo" width="12%"></header>
 
-    {{{body}}}
+ {{{body}}}
+
+ {{#if showTests}}
+ <div id="mocha"></div>
+ <script src="/vendor/mocha.js"></script>
+ <script src="/vendor/chai.js"></script>
+ <script>
+ mocha.ui('tdd');
+ var assert = chai.assert;
+ </script>
+ <script src="/qa/tests-global.js"></script>
+ {{#if pageTestScript}}
+ <script src="{{pageTestScript}}"></script>
+ {{/if}}
+ <script>mocha.run();</script>
+ {{/if}}
+
 </body>
 <br>
-<footer>
-  <p>Bed and Breakfast LLC</p>
-
-</footer>
+<footer>This is a deafult footer.</footer>
 </html>
