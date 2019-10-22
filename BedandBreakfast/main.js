@@ -19,7 +19,6 @@ app.use(express.static(__dirname + '/public'));
 app.use(require('body-parser').urlencoded({extended:true}));
 
 
-
 app.set('port', process.env.PORT || 3002);
 
 if( app.thing == null ) console.log( 'bleat!' );
@@ -32,6 +31,18 @@ app.use(function(req, res, next){
 
 app.get('/', function(req, res) {
  res.render('home');
+});
+
+app.get('/book', function(req, res) {
+ res.render('book');
+});
+
+app.get('/about', function(req, res) {
+ res.render('about');
+});
+
+app.get('/contact', function(req, res) {
+ res.render('contact');
 });
 
 // 404 catch-all handler (middleware)
