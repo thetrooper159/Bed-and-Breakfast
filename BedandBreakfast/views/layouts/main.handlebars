@@ -1,41 +1,42 @@
 <!doctype html>
 <html>
 <head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico"/>
   <title>Bed And Breakfast 2 - The Official Website</title>
    {{#if showTests}}
    <link rel="stylesheet" href="/vendor/mocha.css">
    {{/if}}
+   <meta name="viewport" content="width=device-width, initial-scale=1">
    <script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
+   <link href="css/bootstrap2.css" rel="stylesheet" type="text/css">
 </head>
-<style>
-li a:hover {
-  background-color: #111;
-}
-</style>
-<ul style = "list-style-type: none; margin: 0; padding: 0; overflow: hidden; background-color: #333">
-  <li style = "float: left"><a style="display: block;
-  color: white; text-align: center; padding: 14px 16px; text-decoration: none;
-  font-size:20px; font-family: Impact, Charcoal, sans-serif;" href="/">BnB 2</a></li>
-  <li style = "float: left"><a style="display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;"href="/book">Book A Room</a></li>
-  <li style = "float: left"><a style="display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;"href="/about">About</a></li>
-  <li style = "float: left"><a style="display: block;
-  color: white;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;"href="/contact">Contact Us</a></li>
-</ul>
+<nav class="navbar navbar-default navbar-fixed-top"><body style="padding-top: 70px">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topFixedNavbar1" aria-expanded="false"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+      <a class="navbar-brand" href="/"><img src="img/logo.png" width="70%"></a></div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="topFixedNavbar1">
+      <ul class="nav navbar-nav">
+        <li><a href="/book">Book A Room</a></li>
+        <li><a href="/about">About</a></li>
+		<li><a href="/contact">Contact Us</a></li>
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Content<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="vd.html">Videos</a></li>
+            <li role="separator" class="divider"></li>
+			<li><a href="ms.html">Music</a></li>
+          </ul>
+        </li>
+      </ul>
+		  </div>
+	</div>
+	</body>
+</nav>
 <br><br>
-<body style = "background-color:rgb(135,206,250)">
-  <header><img src="/img/logo.png" alt="My Handlebars Website Logo" width="20%"></header>
+<body>
 
  {{{body}}}
 
@@ -56,5 +57,7 @@ li a:hover {
 
 </body>
 <br>
-<footer>This is a deafult footer.</footer>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<footer>This is a default footer.</footer>
 </html>
