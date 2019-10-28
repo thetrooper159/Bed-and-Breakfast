@@ -65,37 +65,36 @@ app.get('/thank-you', function(req, res){
 });
 
 app.get('/login', function(req, res){
-	res.render('login');
+	res.render('login', { csrf: 'CSRF token goes here' });
 });
 
 function getWeatherData(){
     return {
         locations: [
-            {
-                name: 'Portland',
-                forecastUrl: 'http://www.wunderground.com/US/OR/Portland.html',
+           {
+                name: 'Pittsburgh',
+                forecastUrl: 'http://www.wunderground.com/US/PA/Pittsburgh.html',
                 iconUrl: 'http://icons-ak.wxug.com/i/c/k/cloudy.gif',
                 weather: 'Overcast',
-                temp: '54.1 F (12.3 C)',
-            },
-            {
-                name: 'Bend',
-                forecastUrl: 'http://www.wunderground.com/US/OR/Bend.html',
-                iconUrl: 'http://icons-ak.wxug.com/i/c/k/partlycloudy.gif',
-                weather: 'Partly Cloudy',
-                temp: '55.0 F (12.8 C)',
-            },
-            {
-                name: 'Manzanita',
-                forecastUrl: 'http://www.wunderground.com/US/OR/Manzanita.html',
-                iconUrl: 'http://icons-ak.wxug.com/i/c/k/rain.gif',
-                weather: 'Light Rain',
-                temp: '55.0 F (12.8 C)',
+                temp: '69 F',
             },
         ],
     };
 }
-
+app.post('/process', function(req, res){
+    if(req.xhr || req.accepts('json,html')==='json'){
+        // if there were an error, we would send { error: 'error description' }
+        res.send({ success: true });
+    } else {
+        // if there were an error, we would redirect to an error page
+        console.log('Form (from querystring): ' + req.query.form);
+        console.log('CSRF token (from hidden form field): ' + req.body._csrf);
+        console.log('Name (from visible form field): ' + req.body.name);
+        req.session.name = req.body.name;
+        console.log('Email (from visible form field): ' + req.body.email);
+        res.redirect(303, '/thank-you');
+    }
+});
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){
  res.status(404);

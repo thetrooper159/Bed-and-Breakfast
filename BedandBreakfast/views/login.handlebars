@@ -1,45 +1,55 @@
-<h3>Login Page</h3>
+<h3>Contact Me Here</h3>
 <br>
-<div class="row">
-  <div class="col-sm-6 col-sm-offset-3">
-    <h2 class="text-center" style="padding: 20px;">Guest Login</h2>
-    <form action="/guest/login" method="POST">
-      <div class="form-group">
-        <label for="room">Room Number</label>
-        <input type="number" class="form-control" id="room" name="room" placeholder="Room Number">
-        <p class="validate" id="room-validate" style="display:none;">Please enter your room number.</p>
-      </div>
-      <div class="form-group">
-        <label for="lastname">Last Name</label>
-        <input type="password" class="form-control" id="lastname" name="lastname" placeholder="Last Name">
-        <p class="validate" id="name-validate" style="display:none;">Please enter your last name.</p>
-      </div>
-      <button type="submit" class="btn btn-default" onClick="return empty()">Login</button>
-    </form>
-  </div>
-</div>
-<div class="row" style="padding-bottom:20px;"></div>
-<script>
-  // Prevent empty input
-  function empty() {
-    var name = $("#lastname").val();
-    var room = $("#room").val();
-    var validate = true;
+<div class="formContainer">
+    <form class="form-horizontal newsletterForm" role="form"
+            action="/process?form=newsletter" method="POST">
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+        <div class="form-group">
+            <label for="fieldName" class="col-sm-2 control-label">Name</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control"
+                id="fieldName" name="name">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="fieldEmail" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-4">
+                <input type="email" class="form-control" required
+                    id="fieldEmail" name="email">
+            </div>
+        </div>
 
-    if (!name) {
-      $("#name-validate").show();
-      validate = false;
-    }
-    else if (name) {
-      $("#name-validate").hide();
-    }
-    if (!room) {
-      $("#room-validate").show();
-      validate = false;
-    }
-    else if (room) {
-      $("#room-validate").hide();
-    }
-    return validate;
-  }
-</script>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-4">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+{{#section 'jquery'}}
+    <script>
+        $(document).ready(function(){
+            $('.homeForm').on('submit', function(evt){
+                evt.preventDefault();
+                var action = $(this).attr('action');
+                var $container = $(this).closest('.formContainer');
+                $.ajax({
+                    url: action,
+                    type: 'POST',
+					data: $(this).serialize(),
+                    success: function(data){
+                        if(data.success){
+                            $container.html('<h2>Thank You!</h2>');
+                        } else {
+                            $container.html('There was a problem.');
+                        }
+                        $container.append("<br>" + data.message);
+                    },
+                    error: function(){
+                        $container.html('Error.');
+                    }
+                });
+            });
+        });
+    </script>
+{{/section}}
