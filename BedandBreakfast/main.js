@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var formidable = require('formidable');
+//var formidable = require('formidable');
 // set up handlebars view engine
 var handlebars = require('express-handlebars').create({
  defaultLayout:'main',
@@ -17,9 +17,13 @@ app.set('view engine', 'handlebars');
 
 app.use(express.static(__dirname + '/public'));
 app.use(require('body-parser').urlencoded({extended:true}));
+app.use(require('express-session')({
+  resave:false,
+  saveUniitialized: false,
+  secret:credentials.cookieSecret,
+}));
 
-
-app.set('port', process.env.PORT || 3002);
+app.set('port', process.env.PORT || 3001);
 
 if( app.thing == null ) console.log( 'bleat!' );
 
@@ -27,6 +31,11 @@ app.use(function(req, res, next){
  res.locals.showTests = app.get('env') !== 'production' &&
  req.query.test === '1';
  next();
+});
+
+app.use(function(req, res, next){
+  res.locals.name = req.session.name;
+  next();
 });
 
 app.get('/', function(req, res) {

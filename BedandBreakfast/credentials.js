@@ -1,4 +1,5 @@
 module.exports = {
+  cookieSecret: 'Secret',
   connection: {
     host     : "db.it.pointpark.edu",
     user     : "bnb",
