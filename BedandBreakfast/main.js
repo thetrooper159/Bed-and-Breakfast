@@ -3,6 +3,8 @@ var app = express();
 var fortune = require('./lib/fortune.js');
 var formidable = require('formidable');
 var credentials = require('./credentials.js');
+var count = 0;
+
 // set up handlebars view engine
 var handlebars = require('express-handlebars').create({
  defaultLayout:'main',
@@ -64,7 +66,7 @@ app.get('/thank-you', function(req, res){
 	res.render('thank-you');
 });
 
-app.get('/login', function(req, res){
+app.get('/login', function(req, res, count){
 	res.render('login', { csrf: 'CSRF token goes here' });
 });
 
@@ -92,7 +94,7 @@ app.post('/process', function(req, res){
         console.log('Name (from visible form field): ' + req.body.name);
         req.session.name = req.body.name;
         console.log('Email (from visible form field): ' + req.body.email);
-        res.redirect(303, '/thank-you');
+        res.redirect(303, '/');
     }
 });
 // 404 catch-all handler (middleware)

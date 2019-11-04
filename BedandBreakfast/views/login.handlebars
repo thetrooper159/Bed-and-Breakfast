@@ -18,13 +18,22 @@
                     id="fieldEmail" name="email">
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-4">
                 <button type="submit" class="btn btn-default">Submit</button>
             </div>
         </div>
     </form>
+</div>
+<div class="formContainer">
+    <form class="form-horizontal newsletterForm" role="form"
+            action="/process?form=login" method="POST">
+        <input type="hidden" name="_csrf" value="{{csrf}}">
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-4">
+        <button type="logout" class="btn btn-default">Logout</button>
+    </div>
+</div>
 </div>
 {{#section 'jquery'}}
     <script>
@@ -40,6 +49,31 @@
                     success: function(data){
                         if(data.success){
                             $container.html('<h2>Thank You!</h2>');
+                            count++;
+                        } else {
+                            $container.html('There was a problem.');
+                        }
+                        $container.append("<br>" + data.message);
+                    },
+                    error: function(){
+                        $container.html('Error.');
+                    }
+                });
+            });
+        });
+        $(document).ready(function(){
+            $('.homeForm').on('logout', function(evt){
+                evt.preventDefault();
+                var action2 = $sessionStorage.clear();
+                var $container = $(this).closest('.formContainer');
+                $.ajax({
+                    url: action2,
+                    type: 'POST',
+          data: $(this).serialize(),
+                    success: function(data){
+                        if(data.success){
+                            $container.html('<h2>Thank You!</h2>');
+                            count--;
                         } else {
                             $container.html('There was a problem.');
                         }
