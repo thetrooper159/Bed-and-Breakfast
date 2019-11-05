@@ -43,6 +43,7 @@ app.use(function(req, res, next){
 });
 app.use(function(req, res, next){
   res.locals.name = req.session.name;
+  res.locals.count = count;
   next();
 });
 
@@ -70,8 +71,6 @@ app.get('/login', function(req, res, count){
 	res.render('login', { csrf: 'CSRF token goes here' });
 });
 
-
-
 function getWeatherData(){
     return {
         locations: [
@@ -87,8 +86,9 @@ function getWeatherData(){
 }
 app.post('/process', function(req, res){
     if(req.xhr || req.accepts('json,html')==='json'){
-        // if there were an error, we would send { error: 'error description' }
+        req.session.name = req.body.name;
         res.send({ success: true });
+        count++;
     } else {
         // if there were an error, we would redirect to an error page
         console.log('Form (from querystring): ' + req.query.form);
@@ -97,6 +97,19 @@ app.post('/process', function(req, res){
         req.session.name = req.body.name;
         console.log('Email (from visible form field): ' + req.body.email);
         res.redirect(303, '/');
+        count++;
+    }
+});
+app.get('/logout', function(req, res){
+    if(req.xhr || req.accepts('json,html')==='json'){
+        delete req.session.name;
+        res.send({ success: true });
+        count--;
+    } else {
+        // if there were an error, we would redirect to an error page
+        delete req.session.name;
+        res.redirect(303, '/');
+        count--;
     }
 });
 // 404 catch-all handler (middleware)
