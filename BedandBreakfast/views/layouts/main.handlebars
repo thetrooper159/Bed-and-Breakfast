@@ -33,7 +33,12 @@
 </nav>
 <body>
 
+<h2>Users logged in: {{count}}</h2>
+
+{{#if name}}
 <h2>Welcome, {{name}}</h2>
+{{/if}}
+
  {{{body}}}
 
  {{#if showTests}}
