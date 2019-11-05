@@ -70,6 +70,8 @@ app.get('/login', function(req, res, count){
 	res.render('login', { csrf: 'CSRF token goes here' });
 });
 
+
+
 function getWeatherData(){
     return {
         locations: [
