@@ -3,6 +3,7 @@ var app = express();
 var fortune = require('./lib/fortune.js');
 var formidable = require('formidable');
 var credentials = require('./credentials.js');
+var mysql = require("mysql");
 var count = 0;
 
 // set up handlebars view engine
@@ -43,6 +44,7 @@ app.use(function(req, res, next){
 });
 app.use(function(req, res, next){
   res.locals.name = req.session.name;
+  res.locals.count = count;
   next();
 });
 
@@ -84,18 +86,47 @@ function getWeatherData(){
     };
 }
 app.post('/process', function(req, res){
-    if(req.xhr || req.accepts('json,html')==='json'){
-        // if there were an error, we would send { error: 'error description' }
-        res.send({ success: true });
-    } else {
+    //if(req.xhr || req.accepts('json,html')==='json'){
+      //  req.session.name = req.body.name;
+      //  res.send({ success: true });
+      //  count++;
+    //} else {
         // if there were an error, we would redirect to an error page
+        var conn = mysql.createConnection(credentials.connection);
+        conn.connect(function(err) {
+          if (err) {
+            console.error("ERROR: cannot connect: " + err);
+            return;
+          }
+          conn.query("SELECT * FROM user", function(err, rows, fields) {
+            if (err) {
+              console.error("ERROR: query failed: " + err);
+              return;
+            }
+            console.log(JSON.stringify(rows));
+          });
+          conn.end();
+        });
         console.log('Form (from querystring): ' + req.query.form);
         console.log('CSRF token (from hidden form field): ' + req.body._csrf);
         console.log('Name (from visible form field): ' + req.body.name);
         req.session.name = req.body.name;
         console.log('Email (from visible form field): ' + req.body.email);
         res.redirect(303, '/');
-    }
+        count++;
+  //  }
+});
+app.get('/logout', function(req, res){
+  //  if(req.xhr || req.accepts('json,html')==='json'){
+  //      delete req.session.name;
+    //    res.send({ success: true });
+    //    count--;
+//    } else {
+        // if there were an error, we would redirect to an error page
+        delete req.session.name;
+        res.redirect(303, '/');
+        count--;
+//    }
 });
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){
