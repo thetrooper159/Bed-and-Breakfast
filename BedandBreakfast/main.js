@@ -4,6 +4,7 @@ var fortune = require('./lib/fortune.js');
 var formidable = require('formidable');
 var credentials = require('./credentials.js');
 var mysql = require("mysql");
+var path = require('path');
 var count = 0;
 
 // set up handlebars view engine
@@ -115,6 +116,27 @@ app.post('/process', function(req, res){
         res.redirect(303, '/');
         count++;
   //  }
+});
+app.post('/auth', function(req, res) {
+	var name = req.body.name;
+	var email = req.body.email;
+  var conn = mysql.createConnection(credentials.connection);
+	if (name && email) {
+		conn.query('SELECT * FROM user WHERE name = ? AND email = ?', [name, email], function(err, results, rows, fields) {
+			if (results.length > 0) {
+				req.session.loggedin = true;
+				req.session.name = name;
+				res.redirect(303, '/');
+        count++;
+			} else {
+				res.send('Incorrect Name and/or Email!');
+			}
+			res.end();
+		});
+	} else {
+		res.send('Please enter Name and Email!');
+		res.end();
+	}
 });
 app.get('/logout', function(req, res){
   //  if(req.xhr || req.accepts('json,html')==='json'){
