@@ -1,91 +1,43 @@
-
-<h3>Basic Login Page</h3>
-<br>
-<div class="formContainer">
-    <form class="form-horizontal newsletterForm" role="form"
-            action="/process?form=login" method="POST">
-        <input type="hidden" name="_csrf" value="{{csrf}}">
-        <div class="form-group">
-            <label for="fieldName" class="col-sm-2 control-label">Name</label>
-            <div class="col-sm-4">
-                <input type="text" class="form-control"
-                id="fieldName" name="name">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="fieldEmail" class="col-sm-2 control-label">Email</label>
-            <div class="col-sm-4">
-                <input type="email" class="form-control" required
-                    id="fieldEmail" name="email">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-4">
-                <button type="submit" class="btn btn-default">Submit</button>
-            </div>
-        </div>
-    </form>
-</div>
-<div class="formContainer">
-    <form class="form-horizontal newsletterForm" role="form"
-            action="/process?form=login" method="POST">
-        <input type="hidden" name="_csrf" value="{{csrf}}">
-<div class="form-group">
-    <div class="col-sm-offset-2 col-sm-4">
-        <button type="logout" class="btn btn-default">Logout</button>
-    </div>
-</div>
-</div>
-
-{{#section 'jquery'}}
-    <script>
-        $(document).ready(function(){
-            $('.homeForm').on('submit', function(evt){
-                evt.preventDefault();
-                var action = $(this).attr('action');
-                var $container = $(this).closest('.formContainer');
-                $.ajax({
-                    url: action,
-                    type: 'POST',
-					data: $(this).serialize(),
-                    success: function(data){
-                        if(data.success){
-                            $container.html('<h2>Thank You!</h2>');
-                            count++;
-                        } else {
-                            $container.html('There was a problem.');
-                        }
-                        $container.append("<br>" + data.message);
-                    },
-                    error: function(){
-                        $container.html('Error.');
-                    }
-                });
-            });
-        });
-        $(document).ready(function(){
-            $('.homeForm').on('logout', function(evt){
-                evt.preventDefault();
-                var action2 = $sessionStorage.clear();
-                var $container = $(this).closest('.formContainer');
-                $.ajax({
-                    url: action2,
-                    type: 'POST',
-          data: $(this).serialize(),
-                    success: function(data){
-                        if(data.success){
-                            $container.html('<h2>Thank You!</h2>');
-                            count--;
-                        } else {
-                            $container.html('There was a problem.');
-                        }
-                        $container.append("<br>" + data.message);
-                    },
-                    error: function(){
-                        $container.html('Error.');
-                    }
-                });
-            });
-        });
-    </script>
-{{/section}}
+<head>
+		<style>
+		.login-form {
+			width: 300px;
+			margin: 0 auto;
+			font-family: Tahoma, Geneva, sans-serif;
+		}
+		.login-form h1 {
+			text-align: center;
+			color: #4d4d4d;
+			font-size: 24px;
+			padding: 20px 0 20px 0;
+		}
+		.login-form input[type="email"],
+		.login-form input[type="text"] {
+			width: 100%;
+			padding: 15px;
+			border: 1px solid #dddddd;
+			margin-bottom: 15px;
+			box-sizing:border-box;
+		}
+		.login-form input[type="submit"] {
+			width: 100%;
+			padding: 15px;
+			background-color: #535b63;
+			border: 0;
+			box-sizing: border-box;
+			cursor: pointer;
+			font-weight: bold;
+			color: #ffffff;
+		}
+		</style>
+	</head>
+	<body>
+		<div class="login-form">
+			<h1>Login Form</h1>
+			<form action="auth" method="POST">
+				<input type="text" name="name" placeholder="Name" required>
+				<input type="email" name="email" placeholder="Email" required>
+				<input type="submit">
+			</form>
+		</div>
+	</body>
