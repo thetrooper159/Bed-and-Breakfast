@@ -120,8 +120,13 @@ app.post('/process', function(req, res){
 app.post('/auth', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
+
   var conn = mysql.createConnection(credentials.connection);
 	if (name && email) {
+
+	if (name && email) {
+    var conn = mysql.createConnection(credentials.connection);
+
 		conn.query('SELECT * FROM user WHERE name = ? AND email = ?', [name, email], function(err, results, rows, fields) {
 			if (results.length > 0) {
 				req.session.loggedin = true;
