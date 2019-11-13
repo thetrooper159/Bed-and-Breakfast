@@ -8,11 +8,12 @@ html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
+      background-image: "img.jpg";
+
 }
 body {
   margin: 0;
-  background-color:rgb(135,206,250);
-
+  background-image: "img.jpg";
 }
 article,
 aside,

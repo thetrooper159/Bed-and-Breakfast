@@ -73,6 +73,9 @@ app.get('/login', function(req, res, count){
 	res.render('login', { csrf: 'CSRF token goes here' });
 });
 
+app.get('/register', function(req, res, count){
+	res.render('register', { csrf: 'CSRF token goes here' });
+});
 function getWeatherData(){
     return {
         locations: [
@@ -117,16 +120,32 @@ app.post('/process', function(req, res){
         count++;
   //  }
 });
-app.post('/auth', function(req, res) {
+app.post('/regi', function(req, res) {
+  var users={
+      "name":req.body.name,
+      "email":req.body.email
+  }
+    var conn = mysql.createConnection(credentials.connection);
+		conn.query('INSERT INTO user SET ?',users, function(err, results, fields) {
+      if (err) {
+        res.json({
+            status:false,
+            message:'there are some error with query'
+        })
+      }else{
+          res.json({
+            status:true,
+            data:results,
+            message:'user registered sucessfully'
+        })
+      }
+    });
+});
+app.post('/logi', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
-
-  var conn = mysql.createConnection(credentials.connection);
-	if (name && email) {
-
 	if (name && email) {
     var conn = mysql.createConnection(credentials.connection);
-
 		conn.query('SELECT * FROM user WHERE name = ? AND email = ?', [name, email], function(err, results, rows, fields) {
 			if (results.length > 0) {
 				req.session.loggedin = true;

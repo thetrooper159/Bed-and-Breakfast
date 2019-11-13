@@ -1,13 +1,9 @@
-<h1>Booking Page</h1>
+<h1>Book A Room</h1>
 
 {{#if name}}
-
-<p>You can book a Room if you are a logged in member</p>
-{{else}}
-<p>Please log in to use this page</p>
-
 <p>Here you can book a room when you're logged in!</p>
 {{else}}
 <p>You need to log in to access this page!</p>
-
+<br>
+<p href="/login">Login Here!</p>
 {{/if}}
