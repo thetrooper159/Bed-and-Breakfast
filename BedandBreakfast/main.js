@@ -73,6 +73,9 @@ app.get('/login', function(req, res, count){
 	res.render('login', { csrf: 'CSRF token goes here' });
 });
 
+app.get('/register', function(req, res){
+	res.render('register', { csrf: 'CSRF token goes here' });
+});
 function getWeatherData(){
     return {
         locations: [
@@ -117,20 +120,40 @@ app.post('/process', function(req, res){
         count++;
   //  }
 });
-app.post('/auth', function(req, res) {
+app.post('/regi', function(req, res) {
+  var name = req.body.name;
+	var email = req.body.email;
+  var users = {
+      name: req.body.name,
+      email: req.body.email
+  }
+    var conn = mysql.createConnection(credentials.connection);
+    conn.query('INSERT INTO user SET ?', users, function(err, results, rows, fields) {
+      if (err) {
+        res.json({
+            status:false,
+            message:'there are some error with query: ' + err
+        })
+      }else{
+          res.json({
+            status:true,
+            data:results,
+            message:'user registered sucessfully'
+        })
+      }
+    });
+});
+app.post('/logi', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
-
-  var conn = mysql.createConnection(credentials.connection);
-	if (name && email) {
-
 	if (name && email) {
     var conn = mysql.createConnection(credentials.connection);
-
 		conn.query('SELECT * FROM user WHERE name = ? AND email = ?', [name, email], function(err, results, rows, fields) {
 			if (results.length > 0) {
 				req.session.loggedin = true;
 				req.session.name = name;
+        req.session.user_ID = results[0].ID;
+        console.log(req.session.user_ID);
 				res.redirect(303, '/');
         count++;
 			} else {
@@ -154,6 +177,31 @@ app.get('/logout', function(req, res){
         res.redirect(303, '/');
         count--;
 //    }
+});
+app.post('/bkr', function(req, res) {
+  var sdate = req.body.sdate;
+	var edate = req.body.edate;
+
+  var dates = {
+      sdate: req.body.sdate,
+      edate: req.body.edate,
+      user_ID: req.session.user_ID
+  }
+    var conn = mysql.createConnection(credentials.connection);
+    conn.query('INSERT INTO reservation SET ?', dates, function(err, results, rows, fields) {
+      if (err) {
+        res.json({
+            status:false,
+            message:'there are some error with query: ' + err
+        })
+      }else{
+          res.json({
+            status:true,
+            data:results,
+            message:'dates registered sucessfully'
+        })
+      }
+    });
 });
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){
