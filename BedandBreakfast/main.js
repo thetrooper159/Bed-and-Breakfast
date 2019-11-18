@@ -132,7 +132,9 @@ app.post('/regi', function(req, res) {
       if (err) {
         res.json({
             status:false,
+
             message:'there are some error with query: ' + err
+
         })
       }else{
           res.json({
@@ -184,15 +186,19 @@ app.post('/bkr', function(req, res) {
 
   var dates = {
       sdate: req.body.sdate,
+
       edate: req.body.edate,
       user_ID: req.session.user_ID
+
   }
     var conn = mysql.createConnection(credentials.connection);
     conn.query('INSERT INTO reservation SET ?', dates, function(err, results, rows, fields) {
       if (err) {
         res.json({
             status:false,
+
             message:'there are some error with query: ' + err
+
         })
       }else{
           res.json({
