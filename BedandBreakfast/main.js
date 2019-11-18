@@ -132,7 +132,9 @@ app.post('/regi', function(req, res) {
       if (err) {
         res.json({
             status:false,
-            message:'there are some error with query'
+
+            message:'there are some error with query: ' + err
+
         })
       }else{
           res.json({
@@ -152,6 +154,8 @@ app.post('/logi', function(req, res) {
 			if (results.length > 0) {
 				req.session.loggedin = true;
 				req.session.name = name;
+        req.session.user_ID = results[0].ID;
+        console.log(req.session.user_ID);
 				res.redirect(303, '/');
         count++;
 			} else {
@@ -182,14 +186,19 @@ app.post('/bkr', function(req, res) {
 
   var dates = {
       sdate: req.body.sdate,
-      edate: req.body.edate
+
+      edate: req.body.edate,
+      user_ID: req.session.user_ID
+
   }
     var conn = mysql.createConnection(credentials.connection);
     conn.query('INSERT INTO reservation SET ?', dates, function(err, results, rows, fields) {
       if (err) {
         res.json({
             status:false,
-            message:'there are some error with query'
+
+            message:'there are some error with query: ' + err
+
         })
       }else{
           res.json({

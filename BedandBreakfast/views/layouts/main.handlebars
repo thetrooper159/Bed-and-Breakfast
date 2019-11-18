@@ -4,6 +4,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico"/>
   <title>Bed And Breakfast 2 - The Official Website</title>
+
    {{#if showTests}}
    <link rel="stylesheet" href="/vendor/mocha.css">
    {{/if}}
@@ -39,10 +40,12 @@
 </nav>
 <body>
 
+
 <h2>Users logged in: {{count}}</h2>
 
 {{#if name}}
 <h2>Welcome, {{name}}</h2>
+<h5>Users logged in: {{count}}</h5>
 {{/if}}
 
  {{{body}}}
