@@ -73,7 +73,7 @@ app.get('/login', function(req, res, count){
 	res.render('login', { csrf: 'CSRF token goes here' });
 });
 
-app.get('/register', function(req, res, count){
+app.get('/register', function(req, res){
 	res.render('register', { csrf: 'CSRF token goes here' });
 });
 function getWeatherData(){
@@ -121,12 +121,14 @@ app.post('/process', function(req, res){
   //  }
 });
 app.post('/regi', function(req, res) {
-  var users={
-      "name":req.body.name,
-      "email":req.body.email
+  var name = req.body.name;
+	var email = req.body.email;
+  var users = {
+      name: req.body.name,
+      email: req.body.email
   }
     var conn = mysql.createConnection(credentials.connection);
-		conn.query('INSERT INTO user SET ?',users, function(err, results, fields) {
+    conn.query('INSERT INTO user SET ?', users, function(err, results, rows, fields) {
       if (err) {
         res.json({
             status:false,
@@ -173,6 +175,30 @@ app.get('/logout', function(req, res){
         res.redirect(303, '/');
         count--;
 //    }
+});
+app.post('/bkr', function(req, res) {
+  var sdate = req.body.sdate;
+	var edate = req.body.edate;
+
+  var dates = {
+      sdate: req.body.sdate,
+      edate: req.body.edate
+  }
+    var conn = mysql.createConnection(credentials.connection);
+    conn.query('INSERT INTO reservation SET ?', dates, function(err, results, rows, fields) {
+      if (err) {
+        res.json({
+            status:false,
+            message:'there are some error with query'
+        })
+      }else{
+          res.json({
+            status:true,
+            data:results,
+            message:'dates registered sucessfully'
+        })
+      }
+    });
 });
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){
