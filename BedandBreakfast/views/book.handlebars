@@ -1,4 +1,4 @@
-<h1>Book A Room</h1>
+<h1 style="text-align: center">Book A Room</h1>
 
 {{#if name}}
   <div class="login-form" style="text-align: center">
@@ -15,9 +15,11 @@
   </div>
 {{else}}
 <div style="text-align: center">
-<p>You need to log in to access this page!</p>
+<h2>You need to log in to access this page!</h2>
 <br>
-<a href="/login">Login Here!</a>
+<form action="/login">
+    <input type="submit" value="Login Here!" />
+</form>
 </div>
 {{/if}}
 <script>

@@ -65,8 +65,8 @@ app.get('/contact', function(req, res) {
  res.render('contact');
 });
 
-app.get('/thank-you', function(req, res){
-	res.render('thank-you');
+app.get('/booked', function(req, res){
+	res.render('booked');
 });
 
 app.get('/login', function(req, res, count){
@@ -134,15 +134,27 @@ app.post('/regi', function(req, res) {
             status:false,
             message:'there are some error with query: ' + err
         })
-      }else{
-          res.json({
-            status:true,
-            data:results,
-            message:'user registered sucessfully'
-        })
-      }
+      } else if (name && email) {
+          var conn = mysql.createConnection(credentials.connection);
+      		conn.query('SELECT * FROM user WHERE name = ? AND email = ?', [name, email], function(err, results, rows, fields) {
+      			if (results.length > 0) {
+      				req.session.loggedin = true;
+      				req.session.name = name;
+              req.session.user_ID = results[0].ID;
+              console.log(req.session.user_ID);
+      				res.redirect(303, '/');
+              count++;
+      			} else {
+      				res.send('Incorrect Name and/or Email!');
+      			}
+      			res.end();
+      		});
+      	} else {
+      		res.send('Please enter Name and Email!');
+      		res.end();
+      	}
     });
-});
+  });
 app.post('/logi', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
@@ -195,14 +207,10 @@ app.post('/bkr', function(req, res) {
             message:'there are some error with query: ' + err
         })
       }else{
-          res.json({
-            status:true,
-            data:results,
-            message:'dates registered sucessfully'
-        })
-      }
+          res.redirect('/booked');
+        }
+      })
     });
-});
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){
  res.status(404);

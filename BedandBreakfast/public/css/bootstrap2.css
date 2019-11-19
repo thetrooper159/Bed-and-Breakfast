@@ -14,6 +14,7 @@ html {
 body {
   margin: 0;
   background-image: "img.jpg";
+  background: url(/img/img.jpg) no-repeat center center fixed;
 }
 article,
 aside,
