@@ -73,6 +73,10 @@ app.get('/booked', function(req, res){
 	res.render('booked');
 });
 
+app.get('/contacted', function(req, res){
+	res.render('contacted');
+});
+
 app.get('/login', function(req, res, count){
 	res.render('login', { csrf: 'CSRF token goes here' });
 });
@@ -241,7 +245,7 @@ app.post('/ques', function(req, res) {
                 message:'there are some error with query: ' + err
             })
           }else{
-              res.redirect('/booked');
+              res.redirect('/contacted');
             }
           })
         });
