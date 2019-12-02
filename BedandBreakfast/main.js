@@ -38,11 +38,7 @@ app.use(function(req, res, next){
  req.query.test === '1';
  next();
 });
-app.use(function(req, res, next){
-	if(!res.locals.partials) res.locals.partials = {};
- 	res.locals.partials.weatherContext = getWeatherData();
- 	next();
-});
+
 app.use(function(req, res, next){
   res.locals.name = req.session.name;
   res.locals.count = count;
@@ -84,19 +80,7 @@ app.get('/login', function(req, res, count){
 app.get('/register', function(req, res){
 	res.render('register', { csrf: 'CSRF token goes here' });
 });
-function getWeatherData(){
-    return {
-        locations: [
-           {
-                name: 'Pittsburgh',
-                forecastUrl: 'http://www.wunderground.com/US/PA/Pittsburgh.html',
-                iconUrl: 'http://icons-ak.wxug.com/i/c/k/cloudy.gif',
-                weather: 'Overcast',
-                temp: '69 F',
-            },
-        ],
-    };
-}
+
 app.post('/process', function(req, res){
     //if(req.xhr || req.accepts('json,html')==='json'){
       //  req.session.name = req.body.name;

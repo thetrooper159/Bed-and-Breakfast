@@ -3,7 +3,10 @@
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="shortcut icon" type="image/x-icon" href="img/icon.ico"/>
-  <title>Bed And Breakfast 2 - The Official Website</title>
+
+  <title>Pittsburgh Bed and Breakfast</title>
+
+
   <!--<link rel="stylesheet" href="/css/style.css">-->
    {{#if showTests}}
    <link rel="stylesheet" href="/vendor/mocha.css">
@@ -26,10 +29,16 @@
         <li><a href="/contact">Contact Us</a></li>
           </ul>
           <ul class="nav navbar-nav" style="float: right">
+
+            {{#if user_type }}
+            <li><a href="/adminpage">Admin</a></li>
+            {{/if}}
+
             {{#if name}}
             <li><a href="/logout">Logout</a></li>
             {{else}}
             <li><a href="/login">Login</a></li>
+
             {{/if}}
           </ul>
         </li>
@@ -44,7 +53,7 @@
 
 {{#if name}}
 <h2>Welcome, {{name}}</h2>
-<h5>Users logged in: {{count}}</h5>
+
 {{/if}}
 
  {{{body}}}
