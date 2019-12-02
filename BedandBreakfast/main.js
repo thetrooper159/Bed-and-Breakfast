@@ -38,11 +38,7 @@ app.use(function(req, res, next){
  req.query.test === '1';
  next();
 });
-app.use(function(req, res, next){
-	if(!res.locals.partials) res.locals.partials = {};
- 	res.locals.partials.weatherContext = getWeatherData();
- 	next();
-});
+
 app.use(function(req, res, next){
   res.locals.name = req.session.name;
   res.locals.count = count;
@@ -51,6 +47,10 @@ app.use(function(req, res, next){
 
 app.get('/', function(req, res) {
  res.render('home');
+});
+
+app.get('/adminpage', function(req, res) {
+ res.render('adminpage');
 });
 
 app.get('/book', function(req, res) {
@@ -65,8 +65,12 @@ app.get('/contact', function(req, res) {
  res.render('contact');
 });
 
-app.get('/thank-you', function(req, res){
-	res.render('thank-you');
+app.get('/booked', function(req, res){
+	res.render('booked');
+});
+
+app.get('/contacted', function(req, res){
+	res.render('contacted');
 });
 
 app.get('/login', function(req, res, count){
@@ -76,19 +80,7 @@ app.get('/login', function(req, res, count){
 app.get('/register', function(req, res){
 	res.render('register', { csrf: 'CSRF token goes here' });
 });
-function getWeatherData(){
-    return {
-        locations: [
-           {
-                name: 'Pittsburgh',
-                forecastUrl: 'http://www.wunderground.com/US/PA/Pittsburgh.html',
-                iconUrl: 'http://icons-ak.wxug.com/i/c/k/cloudy.gif',
-                weather: 'Overcast',
-                temp: '69 F',
-            },
-        ],
-    };
-}
+
 app.post('/process', function(req, res){
     //if(req.xhr || req.accepts('json,html')==='json'){
       //  req.session.name = req.body.name;
@@ -123,44 +115,60 @@ app.post('/process', function(req, res){
 app.post('/regi', function(req, res) {
   var name = req.body.name;
 	var email = req.body.email;
+  var type = "customer";
   var users = {
       name: req.body.name,
-      email: req.body.email
+      email: req.body.email,
+      user_type: "customer"
   }
     var conn = mysql.createConnection(credentials.connection);
     conn.query('INSERT INTO user SET ?', users, function(err, results, rows, fields) {
       if (err) {
         res.json({
             status:false,
-
             message:'there are some error with query: ' + err
-
         })
-      }else{
-          res.json({
-            status:true,
-            data:results,
-            message:'user registered sucessfully'
-        })
-      }
+      } else if (name && email) {
+          var conn = mysql.createConnection(credentials.connection);
+      		conn.query('SELECT * FROM user WHERE name = ? AND email = ?', [name, email], function(err, results, rows, fields) {
+      			if (results.length > 0) {
+      				req.session.loggedin = true;
+      				req.session.name = name;
+              req.session.user_ID = results[0].ID;
+              console.log(req.session.user_ID);
+      				res.redirect(303, '/');
+              count++;
+      			} else {
+      				res.send('Incorrect Name and/or Email!');
+      			}
+      			res.end();
+      		});
+      	} else {
+      		res.send('Please enter Name and Email!');
+      		res.end();
+      	}
     });
-});
+  });
 app.post('/logi', function(req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
 	if (name && email) {
     var conn = mysql.createConnection(credentials.connection);
 		conn.query('SELECT * FROM user WHERE name = ? AND email = ?', [name, email], function(err, results, rows, fields) {
-			if (results.length > 0) {
-				req.session.loggedin = true;
-				req.session.name = name;
+      if (results.length > 0) {
+        req.session.loggedin = true;
+        req.session.name = name;
         req.session.user_ID = results[0].ID;
         console.log(req.session.user_ID);
-				res.redirect(303, '/');
-        count++;
-			} else {
+      } else {
 				res.send('Incorrect Name and/or Email!');
-			}
+			} if ( results[0].user_type === "admin") {
+        res.redirect(303,'/adminpage');
+        count++;
+      } else {
+        res.redirect(303,'/');
+        count++;
+      }
 			res.end();
 		});
 	} else {
@@ -186,29 +194,46 @@ app.post('/bkr', function(req, res) {
 
   var dates = {
       sdate: req.body.sdate,
-
       edate: req.body.edate,
       user_ID: req.session.user_ID
-
   }
     var conn = mysql.createConnection(credentials.connection);
     conn.query('INSERT INTO reservation SET ?', dates, function(err, results, rows, fields) {
       if (err) {
         res.json({
             status:false,
-
             message:'there are some error with query: ' + err
-
         })
       }else{
-          res.json({
-            status:true,
-            data:results,
-            message:'dates registered sucessfully'
-        })
-      }
+          res.redirect('/booked');
+        }
+      })
     });
-});
+
+app.post('/ques', function(req, res) {
+  var name = req.body.name;
+  var email = req.body.email;
+  var message = req.body.message;
+
+  var submit = {
+      ID: "1",
+      name: req.body.name,
+      email: req.body.email,
+      message: req.session.message
+      }
+        var conn = mysql.createConnection(credentials.connection);
+        conn.query('INSERT INTO contact SET ?', submit, function(err, results, rows, fields) {
+          if (err) {
+            res.json({
+                status:false,
+                message:'there are some error with query: ' + err
+            })
+          }else{
+              res.redirect('/contacted');
+            }
+          })
+        });
+
 // 404 catch-all handler (middleware)
 app.use(function(req, res, next){
  res.status(404);

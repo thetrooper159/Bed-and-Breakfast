@@ -1,13 +1,13 @@
-<h1>Book A Room</h1>
+<h1 style="text-align: center">Book A Room</h1>
 
 {{#if name}}
   <div class="login-form" style="text-align: center">
     <h2>Select the Dates:</h2>
     <form action="bkr" method="POST">
       <h3>Start Date:</h3>
-      <input id="today" type="date" name ="sdate">
+      <input id="theDate" type="date" name ="sdate">
       <h3>End Date:</h3>
-      <input id="tomorrow" type="date" name="edate">
+      <input id="theTomorrow" type="date" name="edate">
       <br><br>
       <p>DISCLAIMER: Each night costs $95 before tax and parking. Additional fees may apply.</p>
       <input type="submit">
@@ -15,14 +15,11 @@
   </div>
 {{else}}
 <div style="text-align: center">
-<p>You need to log in to access this page!</p>
+<h2>You need to log in to access this page!</h2>
 <br>
-<a href="/login">Login Here!</a>
+<form action="/login">
+    <input type="submit" value="Login Here!" />
+</form>
 </div>
 {{/if}}
-<script>
-let today = new Date().toISOString().substr(0, 10);
-document.querySelector("#today").value = today;
-let tomorrow = new Date().toISOString().substr(0, 10);
-document.querySelector("#today").value ++ 1 = tomorrow;
-</script>
+<script type="text/javascript" src="js/date.js"></script>
