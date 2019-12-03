@@ -38,11 +38,7 @@ app.use(function(req, res, next){
  req.query.test === '1';
  next();
 });
-app.use(function(req, res, next){
-	if(!res.locals.partials) res.locals.partials = {};
- 	res.locals.partials.weatherContext = getWeatherData();
- 	next();
-});
+
 app.use(function(req, res, next){
   res.locals.name = req.session.name;
   res.locals.count = count;
@@ -84,68 +80,20 @@ app.get('/login', function(req, res, count){
 app.get('/register', function(req, res){
 	res.render('register', { csrf: 'CSRF token goes here' });
 });
-function getWeatherData(){
-    return {
-        locations: [
-           {
-                name: 'Pittsburgh',
-                forecastUrl: 'http://www.wunderground.com/US/PA/Pittsburgh.html',
-                iconUrl: 'http://icons-ak.wxug.com/i/c/k/cloudy.gif',
-                weather: 'Overcast',
-                temp: '69 F',
-            },
-        ],
-    };
-}
-app.post('/process', function(req, res){
-    //if(req.xhr || req.accepts('json,html')==='json'){
-      //  req.session.name = req.body.name;
-      //  res.send({ success: true });
-      //  count++;
-    //} else {
-        // if there were an error, we would redirect to an error page
-        var conn = mysql.createConnection(credentials.connection);
-        conn.connect(function(err) {
-          if (err) {
-            console.error("ERROR: cannot connect: " + err);
-            return;
-          }
-          conn.query("SELECT * FROM user", function(err, rows, fields) {
-            if (err) {
-              console.error("ERROR: query failed: " + err);
-              return;
-            }
-            console.log(JSON.stringify(rows));
-          });
-          conn.end();
-        });
-        console.log('Form (from querystring): ' + req.query.form);
-        console.log('CSRF token (from hidden form field): ' + req.body._csrf);
-        console.log('Name (from visible form field): ' + req.body.name);
-        req.session.name = req.body.name;
-        console.log('Email (from visible form field): ' + req.body.email);
-        res.redirect(303, '/');
-        count++;
-  //  }
-});
+
 app.post('/regi', function(req, res) {
   var name = req.body.name;
-	var email = req.body.email;
-  var type = "customer";
+  var email = req.body.email;
   var users = {
       name: req.body.name,
-      email: req.body.email,
-      user_type: "customer"
+      email: req.body.email
   }
     var conn = mysql.createConnection(credentials.connection);
     conn.query('INSERT INTO user SET ?', users, function(err, results, rows, fields) {
       if (err) {
-        res.json({
-            status:false,
-            message:'there are some error with query: ' + err
-        })
+        console.log(err);
+        res.redirect(303, '/register?error='+err);
       } else if (name && email) {
-          var conn = mysql.createConnection(credentials.connection);
       		conn.query('SELECT * FROM user WHERE name = ? AND email = ?', [name, email], function(err, results, rows, fields) {
       			if (results.length > 0) {
       				req.session.loggedin = true;
@@ -155,11 +103,13 @@ app.post('/regi', function(req, res) {
       				res.redirect(303, '/');
               count++;
       			} else {
+              console.log(err);
       				res.redirect(303, '/login');
       			}
       			res.end();
       		});
       	} else {
+          console.log(err);
           res.redirect(303, '/login');
       		res.end();
       	}
@@ -171,13 +121,11 @@ app.post('/logi', function(req, res) {
 	if (name && email) {
     var conn = mysql.createConnection(credentials.connection);
 		conn.query('SELECT * FROM user WHERE name = ? AND email = ?', [name, email], function(err, results, rows, fields) {
-      if (results.length > 0 && results[0].user_type === "admin") {
+      if (results[0].admin === 1) {
         req.session.loggedin = true;
-        req.session.name = name;
         req.session.user_ID = results[0].ID;
         console.log(req.session.user_ID);
         res.redirect(303,'/adminpage');
-        count++;
       } else if (results.length > 0){
         req.session.loggedin = true;
         req.session.name = name;
@@ -186,26 +134,21 @@ app.post('/logi', function(req, res) {
         res.redirect(303,'/');
         count++;
       } else {
+        console.log(err);
         res.redirect(303, '/login');
       }
 			res.end();
 		});
 	} else {
+    console.log(err);
     res.redirect(303, '/login');
 		res.end();
 	}
 });
 app.get('/logout', function(req, res){
-  //  if(req.xhr || req.accepts('json,html')==='json'){
-  //      delete req.session.name;
-    //    res.send({ success: true });
-    //    count--;
-//    } else {
-        // if there were an error, we would redirect to an error page
         delete req.session.name;
         res.redirect(303, '/');
         count--;
-//    }
 });
 app.post('/bkr', function(req, res) {
   var sdate = req.body.sdate;
