@@ -1,0 +1,25 @@
+<h1 style="text-align: center">Book A Room</h1>
+
+{{#if name}}
+  <div class="login-form" style="text-align: center">
+    <h2>Select the Dates:</h2>
+    <form action="bkr" method="POST">
+      <h3>Start Date:</h3>
+      <input id="theDate" type="date" name ="sdate">
+      <h3>End Date:</h3>
+      <input id="theTomorrow" type="date" name="edate">
+      <br><br>
+      <p>DISCLAIMER: Each night costs $95 before tax and parking. Additional fees may apply.</p>
+      <input type="submit">
+    </form>
+  </div>
+{{else}}
+<div style="text-align: center">
+<h2>You need to log in to access this page!</h2>
+<br>
+<form action="/login">
+    <input type="submit" value="Login Here!" />
+</form>
+</div>
+{{/if}}
+<script type="text/javascript" src="js/date.js"></script>
