@@ -12,8 +12,6 @@ html {
 body {
   margin: 0;
   background: url(/img/img.jpg) no-repeat center center fixed;
-  max-width:200%;
-  height:auto;
 }
 article,
 aside,
