@@ -53,10 +53,9 @@ app.get('/adminpage', function(req, res) {
   var conn = mysql.createConnection(credentials.connection);
   conn.query('SELECT bnb.user.name, bnb.reservation.sdate,bnb.reservation.edate FROM bnb.reservation INNER JOIN bnb.user ON bnb.reservation.user_ID = bnb.user.ID;',
    function(err, results, rows, fields){
-   console.log(results);
+    console.log(results);
     res.render('adminpage');
   });
-
 });
 
 app.get('/book', function(req, res) {
@@ -97,7 +96,7 @@ app.post('/regi', function(req, res) {
     var conn = mysql.createConnection(credentials.connection);
     conn.query('INSERT INTO user SET ?', users, function(err, results, rows, fields) {
       if (err) {
-        console.log(err);
+        res.locals.message = "There seems to be an error.";
         res.redirect(303, '/register?error='+err);
       } else if (name && email) {
       		conn.query('SELECT * FROM user WHERE name = ? AND email = ?', [name, email], function(err, results, rows, fields) {
@@ -109,14 +108,14 @@ app.post('/regi', function(req, res) {
       				res.redirect(303, '/');
               count++;
       			} else {
-              console.log(err);
-      				res.redirect(303, '/login');
+              res.locals.message = "There seems to be an error.";
+      				res.redirect(303, '/login?error='+err);
       			}
       			res.end();
       		});
       	} else {
-          console.log(err);
-          res.redirect(303, '/login');
+          res.locals.message = "There seems to be an error.";
+          res.redirect(303, '/login?error='+err);
       		res.end();
       	}
     });
@@ -140,14 +139,14 @@ app.post('/logi', function(req, res) {
         res.redirect(303,'/');
         count++;
       } else {
-        console.log(err);
-        res.redirect(303, '/login');
+        res.locals.message = req.flash('message');
+        res.redirect(303, '/login?error='+err);
       }
 			res.end();
 		});
 	} else {
-    console.log(err);
-    res.redirect(303, '/login');
+    res.locals.message = req.flash('message');
+    res.redirect(303, '/login?error='+err);
 		res.end();
 	}
 });
@@ -184,18 +183,14 @@ app.post('/ques', function(req, res) {
   var message = req.body.message;
 
   var submit = {
-      ID: "1",
       name: req.body.name,
       email: req.body.email,
-      message: req.session.message
+      message: req.body.message
       }
         var conn = mysql.createConnection(credentials.connection);
         conn.query('INSERT INTO contact SET ?', submit, function(err, results, rows, fields) {
           if (err) {
-            res.json({
-                status:false,
-                message:'there are some error with query: ' + err
-            })
+            res.redirect(303, '/contact?error='+err);
           }else{
               res.redirect('/contacted');
             }
