@@ -178,9 +178,8 @@ app.post('/bkr', function(req, res) {
     var conn = mysql.createConnection(credentials.connection);
     conn.query('INSERT INTO reservation SET ?', dates, function(err, results, rows, fields) {
       if (err) {
-        res.json({
-            status:false,
-            message:'there are some error with query: ' + err
+        res.locals.message = "There seems to be an error.";
+        res.redirect('/book?error='+err')
         })
       }else{
           res.redirect('/booked');
