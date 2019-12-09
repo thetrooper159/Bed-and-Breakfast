@@ -58,6 +58,15 @@ app.get('/adminb', function(req, res, next) {
   });
 });
 
+app.get('/adminc', function(req, res, next) {
+  var conn = mysql.createConnection(credentials.connection);
+  conn.query('SELECT bnb.contact.name, bnb.contact.email, bnb.contact.message FROM bnb.contact;',
+   function(err, results, rows, fields){
+    console.log(results);
+    res.render('adminc', {rows: results});
+  });
+});
+
 app.get('/book', function(req, res) {
  res.render('book');
 });

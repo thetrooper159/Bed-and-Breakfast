@@ -1,23 +1,26 @@
 <style>
 table, th, td {
-  border: 1px solid black;
-    background-color: white;
+  border: 2px solid black;
+  background-color: white;
   padding: 20px;
+
 }
 </style>
+  <br>
+  <h1>User Submitted Questions</h1>
   <br>
   <table>
   <tbody>
     <tr>
       <th>Name</th>
-      <th>Start Date</th>
-      <th>End Date</th>
+      <th>Email</th>
+      <th>Question</th>
     </tr>
     {{#each rows}}
       <tr>
-        <td>{{name}}</td>
-      	<td>{{sdate}}</td>
-        <td>{{edate}}</td>
+      	<td>{{name}}</td>
+        <td>{{email}}</td>
+        <td>{{message}}</td>
       </tr>
     {{/each}}
   </tbody>
