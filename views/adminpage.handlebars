@@ -1,0 +1,24 @@
+<style>
+table, th, td {
+  border: 1px solid black;
+  padding: 20px;
+}
+</style>
+  <br>
+  <table>
+  <tbody>
+    <tr>
+      <th>Name</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+    </tr>
+    {{#each rows}}
+      <tr>
+        <td>{{name}}</td>
+      	<td>{{sdate}}</td>
+        <td>{{edate}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+  </table>
+  <br>
