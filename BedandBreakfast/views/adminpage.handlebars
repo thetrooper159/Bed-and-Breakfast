@@ -1,4 +1,9 @@
-<h1>Hello There, Admin.</h1>
+<style>
+table, th, td {
+  border: 1px solid black;
+  padding: 20px;
+}
+</style>
   <br>
   <table>
   <tbody>
@@ -7,11 +12,11 @@
       <th>Start Date</th>
       <th>End Date</th>
     </tr>
-    {{#each people}}
+    {{#each rows}}
       <tr>
         <td>{{name}}</td>
-      	<td>{{code}}</td>
-        <td>{{des}}</td>
+      	<td>{{sdate}}</td>
+        <td>{{edate}}</td>
       </tr>
     {{/each}}
   </tbody>
