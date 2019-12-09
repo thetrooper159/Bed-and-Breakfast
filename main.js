@@ -179,7 +179,7 @@ app.post('/bkr', function(req, res) {
     conn.query('INSERT INTO reservation SET ?', dates, function(err, results, rows, fields) {
       if (err) {
         res.locals.message = "There seems to be an error.";
-        res.redirect('/book?error='+err')
+        res.redirect('/book?error='+err)
         })
       }else{
           res.redirect('/booked');
