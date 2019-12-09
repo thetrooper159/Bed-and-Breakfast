@@ -180,7 +180,6 @@ app.post('/bkr', function(req, res) {
       if (err) {
         res.locals.message = "There seems to be an error.";
         res.redirect('/book?error='+err)
-        })
       }else{
           res.redirect('/booked');
         }
