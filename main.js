@@ -140,22 +140,23 @@ app.post('/logi', function(req, res) {
         req.session.name = name;
         req.session.user_ID = results[0].ID;
         console.log(req.session.user_ID);
+        count++;
         res.redirect(303,'/adminb');
       } else if (results.length > 0){
         req.session.loggedin = true;
         req.session.name = name;
         req.session.user_ID = results[0].ID;
         console.log(req.session.user_ID);
-        res.redirect(303,'/');
         count++;
+        res.redirect(303,'/');
       } else {
-        res.locals.message = req.flash('message');
+        res.locals.message = "There seems to be an error.";
         res.redirect(303, '/login?error='+err);
       }
 			res.end();
 		});
 	} else {
-    res.locals.message = req.flash('message');
+    res.locals.message = "There seems to be an error.";
     res.redirect(303, '/login?error='+err);
 		res.end();
 	}
