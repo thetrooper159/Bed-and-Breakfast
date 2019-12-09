@@ -49,12 +49,12 @@ app.get('/', function(req, res) {
  res.render('home');
 });
 
-app.get('/adminpage', function(req, res, next) {
+app.get('/adminb', function(req, res, next) {
   var conn = mysql.createConnection(credentials.connection);
   conn.query('SELECT bnb.user.name, bnb.reservation.sdate,bnb.reservation.edate FROM bnb.reservation INNER JOIN bnb.user ON bnb.reservation.user_ID = bnb.user.ID;',
    function(err, results, rows, fields){
     console.log(results);
-    res.render('adminpage', {rows: results});
+    res.render('adminb', {rows: results});
   });
 });
 
@@ -131,7 +131,7 @@ app.post('/logi', function(req, res) {
         req.session.name = name;
         req.session.user_ID = results[0].ID;
         console.log(req.session.user_ID);
-        res.redirect(303,'/adminpage');
+        res.redirect(303,'/adminb');
       } else if (results.length > 0){
         req.session.loggedin = true;
         req.session.name = name;
